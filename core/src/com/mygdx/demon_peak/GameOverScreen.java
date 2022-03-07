@@ -6,9 +6,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class GameOverScreen implements Screen {
-    final Bird game;
+    final Demon game;
     OrthographicCamera camera;
-    public GameOverScreen(final Bird gam) {
+    public GameOverScreen(final Demon gam) {
         game = gam;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 480);

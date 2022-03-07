@@ -10,15 +10,15 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import java.util.Random;
 
 public class MainMenuScreen implements Screen {
-    final Bird game;
+    final Demon game;
     static Random random = new Random();
     OrthographicCamera camera;
     Texture backgroundImage;
     Animaciones press_start;
-    Sound musica_menu;
     Demon_Menu dragonMenu1;
+    Sound musica_menu;
 
-    public MainMenuScreen(final Bird gam) {
+    public MainMenuScreen(final Demon gam) {
         game = gam;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 480);
@@ -26,8 +26,9 @@ public class MainMenuScreen implements Screen {
         backgroundImage = new Texture(Gdx.files.internal("background.png"));
 
         dragonMenu1 = new Demon_Menu();
-        /*musica_menu = Gdx.audio.newSound(Gdx.files.internal("Sound/Dance Of Death.mp3"));
-        musica_menu.setLooping(musica_menu.play(0.2f),true);*/
+
+        musica_menu = Gdx.audio.newSound(Gdx.files.internal("Sound/yellowcard.wav"));
+
     }
 
     @Override
@@ -36,6 +37,7 @@ public class MainMenuScreen implements Screen {
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
+
 
         Temporizador.tiempomenu += 1;
 

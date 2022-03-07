@@ -14,9 +14,10 @@ import com.badlogic.gdx.utils.TimeUtils;
 import java.util.Iterator;
 
 public class GameScreen implements Screen {
-    final Bird game;
+    final Demon game;
 
     Texture backgroundImage;
+    Texture pause;
     OrthographicCamera camera;
     Animaciones playerAnim;
     Rectangle player;
@@ -24,6 +25,8 @@ public class GameScreen implements Screen {
     Texture pipeDownImage;
     Array<Rectangle> obstacles;
     long lastObstacleTime;
+
+    long tiempoAparicion;
 
     float speedy;
     float gravity;
@@ -34,7 +37,8 @@ public class GameScreen implements Screen {
     Sound flapSound;
     Sound failSound;
 
-    public GameScreen(final Bird gam) {
+
+    public GameScreen(final Demon gam) {
         this.game = gam;
         // load the images
         backgroundImage = new Texture(Gdx.files.internal("background.jpg"));
@@ -48,14 +52,18 @@ public class GameScreen implements Screen {
         player = new Rectangle();
         player.x = 200;
         player.y = 480 / 2 - 64 / 2;
-        player.width = 64;
-        player.height = 45;
+        player.width = 35;
+        player.height = 30;
 
         speedy = 0;
         gravity = 850f;
 
+        pause = new Texture(Gdx.files.internal("pause.png"));
+
         pipeUpImage = new Texture(Gdx.files.internal("pipe_up.png"));
         pipeDownImage = new Texture(Gdx.files.internal("pipe_down.png"));
+
+        tiempoAparicion = 1500000000;
 
         // create the obstacles array and spawn the first obstacle
         obstacles = new Array<Rectangle>();
@@ -69,7 +77,6 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-
         //Render
         // clear the screen with a color
         ScreenUtils.clear(0.3f, 0.8f, 0.8f, 1);
@@ -79,8 +86,11 @@ public class GameScreen implements Screen {
         // coordinate system specified by the camera.
         game.batch.setProjectionMatrix(camera.combined);
         // begin a new batch
+
         game.batch.begin();
+
         game.batch.draw(backgroundImage, 0, 0);
+        game.batch.draw(pause, 725, 430);
         game.batch.draw(playerAnim.getFrame(Temporizador.tiempoJuego), player.x, player.y);
         // Dibuixa els obstacles: Els parells son tuberia inferior,
         //els imparells tuberia superior
@@ -96,6 +106,13 @@ public class GameScreen implements Screen {
         if (Gdx.input.justTouched()) {
             speedy = 400f;
             flapSound.play();
+            // Boton pausa
+            if (Gdx.input.getX() > 2000) {
+                if ( Gdx.input.getY() < 430){
+                    dead = true;
+                }
+
+            }
         }
         // Comprova que el jugador no es surt de la pantalla.
         // Si surt per la part inferior, game over
@@ -121,9 +138,15 @@ public class GameScreen implements Screen {
             dead = true;
         }
 
-        // Comprova si cal generar un obstacle nou
-        if (TimeUtils.nanoTime() - lastObstacleTime > 1500000000)
+        // Comprova si cal generar un obstacle nou y genera dificultat cada 10 oleadas
+        if (TimeUtils.nanoTime() - lastObstacleTime > tiempoAparicion) {
+            if ((int) score % 10 == 0) {
+                if (tiempoAparicion > 500000000) {
+                    tiempoAparicion -= 250000000;
+                }
+            }
             spawnObstacle();
+        }
         // Mou els obstacles. Elimina els que estan fora de la pantalla
         // Comprova si el jugador colisiona amb un obstacle,
         // llavors game over
