@@ -1,0 +1,3 @@
+-   mirar de que pueda poner pausa y al quitarla que no de saltos
+-   cambiar sonido game over.
+-   score cambiar.

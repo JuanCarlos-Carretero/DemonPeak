@@ -2,11 +2,14 @@ package com.mygdx.demon_peak;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.ScreenUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class MainMenuScreen implements Screen {
@@ -16,7 +19,7 @@ public class MainMenuScreen implements Screen {
     Texture backgroundImage;
     Animaciones press_start;
     Demon_Menu dragonMenu1;
-    Sound musica_menu;
+    static Music musica_menu;
 
     public MainMenuScreen(final Demon gam) {
         game = gam;
@@ -27,7 +30,8 @@ public class MainMenuScreen implements Screen {
 
         dragonMenu1 = new Demon_Menu();
 
-        musica_menu = Gdx.audio.newSound(Gdx.files.internal("Sound/yellowcard.wav"));
+        musica_menu = Gdx.audio.newMusic(Gdx.files.internal("Sound/yellowcard.wav"));
+        musica_menu.play();
 
     }
 
@@ -47,6 +51,7 @@ public class MainMenuScreen implements Screen {
         game.batch.draw(press_start.getFrame(Temporizador.tiempomenu), 300, -70, 400, 500);
 
         game.batch.end();
+
         if (Gdx.input.justTouched()) {
             game.setScreen(new GameScreen(game));
             dispose();
